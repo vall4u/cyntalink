@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cyntaclaw-rekomin-bio
+    runtime: node
+    plan: free
+    buildCommand: echo "No external build dependencies needed"
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_PASSWORD
+        value: sayang123

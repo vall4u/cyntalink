@@ -1,0 +1,23 @@
+{
+  "name": "rekomin-bio",
+  "version": "1.0.0",
+  "description": "Lightweight, responsive link-in-bio & curated affiliate recommendation platform with analytics and 1080x1920 Instagram Story card generator.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test/smoke.test.js"
+  },
+  "keywords": [
+    "link-in-bio",
+    "affiliate",
+    "recommendations",
+    "creator-tools",
+    "rekomin",
+    "instagram-story-generator"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

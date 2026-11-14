@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Studio • @cyntaclaw — Kelola Rekomin Bio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="top-utility-nav">
+      <a href="./" class="brand-pill">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span>Creator Studio • @cyntaclaw</span>
+      </a>
+      <nav class="utility-actions" aria-label="Navigasi Studio">
+        <a href="./" target="_blank" rel="noopener" class="btn btn-secondary">Lihat Halaman Publik ↗</a>
+        <button type="button" id="btn-logout" class="btn btn-ghost" hidden>Keluar</button>
+      </nav>
+    </header>
+
+    <main id="admin-main">
+      <!-- Login View -->
+      <section id="login-view" class="admin-card" style="max-inline-size: 430px; margin-inline: auto; margin-block-start: 3rem;">
+        <h1 class="section-title" style="font-size: 1.5rem; margin-block-end: 0.35rem;">Masuk ke Creator Studio 💋</h1>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-block: 0 1.25rem;">
+          Kelola Spill the 🍵 koleksi beauty <code>@cyntaclaw</code>, import link dari <code>msha.ke/cyntaclaw</code>, dan pantau analitik klik pengunjung.
+        </p>
+        <form id="login-form">
+          <div class="field-group">
+            <label for="login-password">PIN / Password Admin</label>
+            <input
+              type="password"
+              id="login-password"
+              class="field-input"
+              placeholder="Masukkan PIN (default: sayang123)"
+              autocomplete="current-password"
+              required
+              autofocus
+            >
+          </div>
+          <p id="login-error" style="color: #c9302c; font-size: 0.82rem; font-weight: 600; margin-block: 0 0.75rem;" hidden></p>
+          <button type="submit" class="btn btn-primary" style="inline-size: 100%; padding-block: 0.7rem;">
+            Buka Dashboard
+          </button>
+        </form>
+      </section>
+
+      <!-- Authenticated Dashboard View -->
+      <div id="dashboard-view" hidden>
+        <div style="display: flex; flex-wrap: wrap; align-items: safe center; justify-content: space-between; gap: 0.75rem; margin-block-end: 1.25rem;">
+          <div>
+            <h1 id="studio-greeting" class="section-title" style="font-size: 1.55rem;">Halo, cyntaclaw ❤! 👋</h1>
+            <p class="section-subtitle" style="margin: 0;">Semua 20 produk dari <code>msha.ke/cyntaclaw</code> sudah terhubung &amp; siap dikelola.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" id="btn-open-import-modal" class="btn btn-secondary">📥 Import msha.ke / Bio Link</button>
+            <button type="button" id="btn-quick-add-item" class="btn btn-primary">+ Tambah Produk</button>
+            <button type="button" id="btn-quick-add-col" class="btn btn-secondary">+ Koleksi Baru</button>
+          </div>
+        </div>
+
+        <div class="admin-tabs" role="tablist" aria-label="Menu Dashboard">
+          <button type="button" class="admin-tab" role="tab" data-tab="analytics" aria-selected="true">📊 Analitik &amp; Klik</button>
+          <button type="button" class="admin-tab" role="tab" data-tab="items" aria-selected="false">💄 Produk &amp; Spill Link (#01–#20)</button>
+          <button type="button" class="admin-tab" role="tab" data-tab="collections" aria-selected="false">🗂️ Koleksi Kategori</button>
+          <button type="button" class="admin-tab" role="tab" data-tab="profile" aria-selected="false">🎨 Profil &amp; Tema</button>
+        </div>
+
+        <!-- TAB 1: ANALYTICS -->
+        <section id="tab-analytics" class="tab-panel">
+          <div id="kpi-container" class="kpi-grid"></div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem;">
+            <div class="admin-card">
+              <div style="display: flex; justify-content: space-between; align-items: safe center;">
+                <h2 class="section-title" style="font-size: 1.1rem;">Tren Kunjungan &amp; Klik (7 Hari Terakhir)</h2>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Abu: Views • Berry: Klik</span>
+              </div>
+              <div id="analytics-chart" class="chart-bars"></div>
+            </div>
+
+            <div class="admin-card">
+              <h2 class="section-title" style="font-size: 1.1rem; margin-block-end: 0.75rem;">Performa Koleksi</h2>
+              <div class="table-scroll">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Koleksi</th>
+                      <th>Produk</th>
+                      <th>Total Klik</th>
+                    </tr>
+                  </thead>
+                  <tbody id="analytics-collections-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <h2 class="section-title" style="font-size: 1.1rem; margin-block-end: 0.75rem;">🏆 Produk Paling Banyak Diklik</h2>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Nama Produk</th>
+                    <th>Marketplace</th>
+                    <th>Koleksi</th>
+                    <th>Harga / Info</th>
+                    <th>Klik</th>
+                  </tr>
+                </thead>
+                <tbody id="analytics-top-items-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: ITEMS / AFFILIATE PRODUCTS -->
+        <section id="tab-items" class="tab-panel" hidden>
+          <div class="admin-card">
+            <div style="display: flex; flex-wrap: wrap; align-items: safe center; justify-content: space-between; gap: 0.75rem; margin-block-end: 1rem;">
+              <div>
+                <h2 class="section-title" style="font-size: 1.15rem;">Daftar Produk Affiliate (@cyntaclaw)</h2>
+                <p class="section-subtitle" style="margin: 0;">Bisa tambah manual satu per satu atau sinkronisasi langsung dari <code>www.msha.ke/cyntaclaw</code>.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button type="button" id="btn-import-from-items-tab" class="btn btn-secondary">📥 Import dari msha.ke/cyntaclaw</button>
+                <button type="button" id="btn-add-item-panel" class="btn btn-primary">+ Tambah Produk</button>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Produk</th>
+                    <th>Koleksi</th>
+                    <th>Toko &amp; Label</th>
+                    <th>Klik</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-items-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: COLLECTIONS -->
+        <section id="tab-collections" class="tab-panel" hidden>
+          <div class="admin-card">
+            <div style="display: flex; flex-wrap: wrap; align-items: safe center; justify-content: space-between; gap: 0.75rem; margin-block-end: 1rem;">
+              <h2 class="section-title" style="font-size: 1.15rem;">Daftar Koleksi Kategori</h2>
+              <button type="button" id="btn-add-col-panel" class="btn btn-primary">+ Buat Koleksi Baru</button>
+            </div>
+            <div id="admin-collections-grid" class="collections-grid"></div>
+          </div>
+        </section>
+
+        <!-- TAB 4: PROFILE & THEME -->
+        <section id="tab-profile" class="tab-panel" hidden>
+          <form id="profile-form" class="admin-card">
+            <h2 class="section-title" style="font-size: 1.2rem; margin-block-end: 1rem;">Pengaturan Profil &amp; Cool—Light Summer Theme</h2>
+
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="prof-name">Nama Tampilan</label>
+                <input type="text" id="prof-name" class="field-input" autocomplete="name" required>
+              </div>
+              <div class="field-group">
+                <label for="prof-handle">Username / Handle (tanpa @)</label>
+                <input type="text" id="prof-handle" class="field-input" autocomplete="username" required>
+              </div>
+              <div class="field-group">
+                <label for="prof-location">Pronouns &amp; Kategori Bio</label>
+                <input type="text" id="prof-location" class="field-input" placeholder="die/sie • Beauty, cosmetic & personal care">
+              </div>
+              <div class="field-group">
+                <label for="prof-domain">Label Domain (Tampil di Header &amp; Story IG)</label>
+                <input type="text" id="prof-domain" class="field-input" placeholder="cyntaclaw.rekomin.bio">
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="prof-tagline">Bio / Deskripsi Singkat</label>
+              <textarea id="prof-tagline" class="field-input" rows="2"></textarea>
+            </div>
+
+            <div class="field-group">
+              <label for="prof-announcement">Teks Banner Pengumuman Atas</label>
+              <input type="text" id="prof-announcement" class="field-input" placeholder="🍵 Spill the tea • ❅ Recommendations Products ❅">
+            </div>
+
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="prof-theme-color">Warna Tema Utama (Cool—Light Summer Palette)</label>
+                <div style="display: flex; align-items: safe center; gap: 0.5rem; flex-wrap: wrap;">
+                  <input type="color" id="prof-theme-color" value="#b55d7a" style="inline-size: 46px; block-size: 38px; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 2px;">
+                  <button type="button" class="btn btn-secondary" data-preset-color="#b55d7a" style="padding: 0.35rem 0.7rem; font-size: 0.75rem;">Summer Berry💋</button>
+                  <button type="button" class="btn btn-secondary" data-preset-color="#6f78a6" style="padding: 0.35rem 0.7rem; font-size: 0.75rem;">Cool Periwinkle</button>
+                  <button type="button" class="btn btn-secondary" data-preset-color="#6f8274" style="padding: 0.35rem 0.7rem; font-size: 0.75rem;">Milkshake Sage🍵</button>
+                  <button type="button" class="btn btn-secondary" data-preset-color="#c94a6a" style="padding: 0.35rem 0.7rem; font-size: 0.75rem;">Bare Grape</button>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label for="prof-avatar-file">Ganti Foto Profil (Otomatis dikompres ke WebP)</label>
+                <input type="file" id="prof-avatar-file" accept="image/*" class="field-input">
+              </div>
+            </div>
+
+            <h3 class="section-title" style="font-size: 1rem; margin-block: 1rem 0.65rem;">Tautan Media Sosial (@cyntaclaw &amp; @markedbyliebe)</h3>
+            <div class="form-grid">
+              <div class="field-group">
+                <label for="soc-instagram">URL Instagram (@cyntaclaw)</label>
+                <input type="url" id="soc-instagram" class="field-input" placeholder="https://www.instagram.com/cyntaclaw/">
+              </div>
+              <div class="field-group">
+                <label for="soc-markedbyliebe">URL Brand (@markedbyliebe)</label>
+                <input type="url" id="soc-markedbyliebe" class="field-input" placeholder="https://www.instagram.com/markedbyliebe/">
+              </div>
+              <div class="field-group">
+                <label for="soc-threads">URL Threads (@cyntaclaw)</label>
+                <input type="url" id="soc-threads" class="field-input" placeholder="https://www.threads.net/@cyntaclaw">
+              </div>
+              <div class="field-group">
+                <label for="soc-mshake">URL Milkshake (msha.ke/cyntaclaw)</label>
+                <input type="url" id="soc-mshake" class="field-input" placeholder="https://msha.ke/cyntaclaw">
+              </div>
+            </div>
+
+            <h3 class="section-title" style="font-size: 1rem; margin-block: 1rem 0.65rem;">Keamanan Dashboard</h3>
+            <div class="field-group" style="max-inline-size: 340px;">
+              <label for="prof-new-password">Ganti PIN / Password Admin Baru (Opsional)</label>
+              <input
+                type="password"
+                id="prof-new-password"
+                class="field-input"
+                placeholder="Biarkan kosong jika tidak ingin mengganti"
+                autocomplete="new-password"
+              >
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-block-start: 1rem;">
+              <button type="submit" class="btn btn-primary">Simpan Perubahan Profil</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Import from msha.ke/cyntaclaw or Bio Link Modal (<dialog closedby="any">) -->
+  <dialog id="import-links-dialog" closedby="any" aria-labelledby="import-dialog-title">
+    <div class="dialog-header">
+      <h2 id="import-dialog-title" class="dialog-title">📥 Import dari msha.ke/cyntaclaw &amp; Bio Link</h2>
+      <form method="dialog">
+        <button type="submit" value="close" class="dialog-close-btn" aria-label="Tutup dialog import">✕</button>
+      </form>
+    </div>
+    <form id="import-links-form" class="dialog-body">
+      <div class="field-group">
+        <label for="import-source-url">URL Halaman Milkshake / Bio Link</label>
+        <input
+          type="url"
+          id="import-source-url"
+          class="field-input"
+          value="https://www.msha.ke/cyntaclaw"
+          placeholder="https://www.msha.ke/cyntaclaw"
+          autofocus
+        >
+        <span style="font-size: 0.76rem; color: var(--text-muted);">
+          Otomatis mengambil judul produk, nomor <code>#1–#20</code>, review, foto, dan link Shopee dari <code>msha.ke/cyntaclaw</code>.
+        </span>
+      </div>
+
+      <div class="field-group">
+        <label for="import-target-collection">Simpan ke Koleksi (Untuk item baru)</label>
+        <select id="import-target-collection" class="field-input"></select>
+      </div>
+
+      <div class="field-group">
+        <label for="import-raw-text">Atau Tempel Daftar Link Baru Secara Manual (Opsional, 1 baris per produk)</label>
+        <textarea
+          id="import-raw-text"
+          class="field-input"
+          rows="4"
+          placeholder="Contoh:&#10;Masami Forever Matte Foundation Powder #21 | https://shope.ee/contoh | Blurring matte powder favorit di konten IG"
+        ></textarea>
+      </div>
+
+      <div class="dialog-footer" style="margin-inline: -1.35rem; margin-block-end: -1.25rem;">
+        <button type="button" id="btn-cancel-import" class="btn btn-secondary">Batal</button>
+        <button type="submit" id="btn-submit-import" class="btn btn-primary">Import &amp; Sinkronkan Sekarang</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Add / Edit Product Modal (<dialog closedby="any">) -->
+  <dialog id="item-editor-dialog" closedby="any" aria-labelledby="item-editor-title">
+    <div class="dialog-header">
+      <h2 id="item-editor-title" class="dialog-title">Tambah / Edit Produk</h2>
+      <form method="dialog">
+        <button type="submit" value="close" class="dialog-close-btn" aria-label="Tutup form produk">✕</button>
+      </form>
+    </div>
+    <form id="item-editor-form" class="dialog-body">
+      <input type="hidden" id="edit-item-id">
+
+      <div class="field-group">
+        <label for="edit-item-url">Link Affiliate Produk (shope.ee, Shopee, Tokopedia, TikTok Shop)</label>
+        <input type="url" id="edit-item-url" class="field-input" placeholder="https://shope.ee/..." required autofocus>
+        <span style="font-size: 0.74rem; color: var(--text-muted);">Tempel link toko untuk mendeteksi nama marketplace secara otomatis.</span>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="edit-item-code">Nomor Kode Barang (contoh: 21)</label>
+          <input type="text" id="edit-item-code" class="field-input" placeholder="21" required>
+        </div>
+        <div class="field-group">
+          <label for="edit-item-collection">Koleksi Kategori</label>
+          <select id="edit-item-collection" class="field-input" required></select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="edit-item-title">Nama Produk</label>
+        <input type="text" id="edit-item-title" class="field-input" placeholder="Masami Forever Matte Blurring Powder" required>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="edit-item-marketplace">Marketplace</label>
+          <input type="text" id="edit-item-marketplace" class="field-input" placeholder="Shopee" required>
+        </div>
+        <div class="field-group">
+          <label for="edit-item-badge">Badge Highlight (Opsional)</label>
+          <input type="text" id="edit-item-badge" class="field-input" placeholder="Korean Look / MLBB Shade">
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="edit-item-price">Harga / Label Tombol</label>
+          <input type="text" id="edit-item-price" class="field-input" placeholder="Cek Promo Shopee">
+        </div>
+        <div class="field-group">
+          <label for="edit-item-orig-price">Harga Coret (Opsional)</label>
+          <input type="text" id="edit-item-orig-price" class="field-input" placeholder="Rp 129.000">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="edit-item-note">Catatan / Spill Review @cyntaclaw</label>
+        <textarea id="edit-item-note" class="field-input" rows="2" placeholder="Kenapa produk ini bagus banget?"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="edit-item-specs">Poin Spesifikasi (Pisahkan dengan koma)</label>
+        <input type="text" id="edit-item-specs" class="field-input" placeholder="Cool-light summer friendly, Long lasting, Acne safe">
+      </div>
+
+      <div class="field-group">
+        <label for="edit-item-image-url">URL Gambar Produk (dari msha.ke atau kosongkan jika upload file)</label>
+        <input type="url" id="edit-item-image-url" class="field-input" placeholder="https://images.msha.ke/...">
+      </div>
+
+      <div class="field-group">
+        <label for="edit-item-image-file">Atau Unggah Foto Produk dari HP/Laptop (Otomatis WebP)</label>
+        <input type="file" id="edit-item-image-file" accept="image/*" class="field-input">
+      </div>
+
+      <div class="dialog-footer" style="margin-inline: -1.35rem; margin-block-end: -1.25rem;">
+        <button type="button" id="btn-cancel-item-edit" class="btn btn-secondary">Batal</button>
+        <button type="submit" class="btn btn-primary">Simpan Produk</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Add / Edit Collection Modal (<dialog closedby="any">) -->
+  <dialog id="col-editor-dialog" closedby="any" aria-labelledby="col-editor-title">
+    <div class="dialog-header">
+      <h2 id="col-editor-title" class="dialog-title">Tambah / Edit Koleksi</h2>
+      <form method="dialog">
+        <button type="submit" value="close" class="dialog-close-btn" aria-label="Tutup form koleksi">✕</button>
+      </form>
+    </div>
+    <form id="col-editor-form" class="dialog-body">
+      <input type="hidden" id="edit-col-id">
+
+      <div class="field-group">
+        <label for="edit-col-title">Judul Koleksi</label>
+        <input type="text" id="edit-col-title" class="field-input" placeholder="Complexion & Flawless Base" required autofocus>
+      </div>
+
+      <div class="form-grid">
+        <div class="field-group">
+          <label for="edit-col-category">Label Kategori</label>
+          <input type="text" id="edit-col-category" class="field-input" placeholder="Complexion" required>
+        </div>
+        <div class="field-group">
+          <label for="edit-col-color">Warna Aksen Kartu &amp; Story IG</label>
+          <input type="color" id="edit-col-color" value="#b55d7a" class="field-input" style="block-size: 40px; padding: 3px;">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="edit-col-desc">Deskripsi Koleksi</label>
+        <textarea id="edit-col-desc" class="field-input" rows="2" placeholder="Koleksi makeup cool—light summer..."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="edit-col-cover-file">Unggah Gambar Sampul Koleksi (Opsional, WebP)</label>
+        <input type="file" id="edit-col-cover-file" accept="image/*" class="field-input">
+      </div>
+
+      <div class="dialog-footer" style="margin-inline: -1.35rem; margin-block-end: -1.25rem;">
+        <button type="button" id="btn-cancel-col-edit" class="btn btn-secondary">Batal</button>
+        <button type="submit" class="btn btn-primary">Simpan Koleksi</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="rk-toast" class="rk-toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="./js/admin.js"></script>
+</body>
+</html>
